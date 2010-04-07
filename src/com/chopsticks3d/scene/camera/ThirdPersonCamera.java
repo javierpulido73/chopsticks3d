@@ -2,15 +2,13 @@ package com.chopsticks3d.scene.camera;
 
 import com.chopsticks3d.scene.SceneNode;
 
-import android.util.FloatMath;
-
 public class ThirdPersonCamera extends Camera {
 	private static float POSITION_Y = 5.0f;
 	
 	private SceneNode mNode;
-	private float angle;
-	private float x;
-	private float z;
+//	private float angle;
+//	private float x;
+//	private float z;
 	
 	public ThirdPersonCamera(SceneNode node) {
 		mNode = node;
@@ -20,7 +18,7 @@ public class ThirdPersonCamera extends Camera {
 	public void update() {
 		float[] matrix = mNode.getTransformation();
 		
-		angle = mNode.getRotationY();
+//		angle = mNode.getRotationY();
 		
 		//TODO Calculate position from angle
 //		x = FloatMath.sin((PI/2 - (angle * 180/PI))) * RADIUS;
