@@ -1,5 +1,5 @@
 #labels Featured
-#A tutorial the learn you to set up and start working with the Chopsticks3D framework.
+#A tutorial that learn you to set up and start working with the Chopsticks3D framework.
 
 = Introduction =
 
