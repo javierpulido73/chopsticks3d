@@ -7,7 +7,7 @@ In this tutorial you will learn how to start a new Chopsticks3D project in Eclip
 Before you start, you should download the latest .jar file of Chopsticks3D. It can be found under the Download tab.
 
 = Starting up a project in Eclipse =
-Start by creating a new Android Project in Eclipse and name the activity !HelloChopsticks.
+Start by creating a new Android Project in Eclipse and name the activity HelloChopsticks.
 
 After it is finished, *Right Click* on your project and select *Properties*.
 
@@ -17,7 +17,7 @@ Go to directory of the Chopsticks3D .jar and select it and press OK.
 You now got a working Chopsticks3D project.
 
 = Constructing a simple scene =
-In the !HelloChopsticks.java Activity file write the following code:
+In the HelloChopsticks.java Activity file write the following code:
 
 {{{
 package com.example.hellochopsticks;
