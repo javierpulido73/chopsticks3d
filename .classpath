@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<classpath>
-	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="C:/Program/Android SDK/android-sdk-windows-1.5_r2/platforms/android-1.6/android.jar"/>
-	<classpathentry kind="output" path="bin"/>
-</classpath>
