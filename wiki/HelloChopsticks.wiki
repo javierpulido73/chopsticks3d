@@ -10,6 +10,7 @@ Before you start, you should download the latest .jar file of Chopsticks3D. It c
 Start by creating a new Android Project in Eclipse and name the activity HelloChopsticks.
 
 After it is finished, *Right Click* on your project and select *Properties*.
+
 In the Properties window, select *Java Build Path > Libraries > Add External JARs*.
 Go to directory of the Chopsticks3D .jar and select it and press OK.
 
