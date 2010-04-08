@@ -1,10 +1,10 @@
 package com.chopsticks3d.scene.camera;
 
-import com.chopsticks3d.math.FastMath;
-
 import android.opengl.Matrix;
 
 public class Camera {
+	private static final float DEG_TO_RAD = 0.01745329238474369f;
+
 	private float[] project = {
 			1,0,0,0,
 			0,1,0,0,
@@ -25,19 +25,22 @@ public class Camera {
 	private float[] y = new float[3];
 	private float[] z = new float[3];
 	private float mag;
-
-	//	private float[] position = new float[3];
+	
+	private float[] position = new float[3];
 
 	public Camera() {
 		setPerspective(60.0f, 0.1f, 20.0f);
 	}
 
 	public static void setDisplayDimensions(int width, int height) {
+		//		Camera.height = height;
+		//		Camera.half_height = height / 2;
+		//		Camera.half_width = width / 2;
 		Camera.aspect = (float)width / height;
 	}
 
 	public void setPerspective(float fovy, float zNear, float zFar) {
-		float tan_fovy_half = (float) Math.tan((fovy * FastMath.DEG_TO_RAD) / 2);
+		float tan_fovy_half = (float) Math.tan((fovy * DEG_TO_RAD) / 2);
 		project[5] = 1 / tan_fovy_half;  // = cot(fovy/2)
 
 		// Remember, column major matrix
@@ -77,6 +80,21 @@ public class Camera {
 			for(int i = 0; i < 16; i++) {
 				model[i] = m[i];
 			}
+		}
+	}
+
+	/**
+	 * Sets the cameras rotation matrix. This is similar
+	 * to setting the model view matrix but it keeps the
+	 * cameras current position.
+	 * @param rotM rotation matrix to set
+	 */
+	public void setRotationM(float[] rotM) {
+		synchronized(model) {
+			for(int i = 0; i < 16; i++) {
+				model[i] = rotM[i];
+			}
+			Matrix.translateM(model, 0, -position[0], -position[1], -position[2]);
 		}
 	}
 
@@ -136,6 +154,11 @@ public class Camera {
 		y[1] = -z[0] * x[2] + z[2] * x[0];
 		y[2] = z[0] * x[1] - z[1] * x[0];
 
+		// mpichler, 19950515
+
+		// cross product gives area of parallelogram, which is < 1.0 for
+		// non-perpendicular unit-length vectors; so normalize x, y here
+
 		mag = Matrix.length(x[0], x[1], x[2]);
 		if (mag > 0) {
 			mag = 1/mag;
@@ -172,13 +195,78 @@ public class Camera {
 
 			//Matrix.multiplyMM(model, 0, m, 0, model, 0);
 			// Translate Eye to Origin 
-			Matrix.translateM(model, 0, -eyex, -eyey, eyez);
+			position[0] = eyex;
+			position[1] = eyey;
+			position[2] = eyez;
+			Matrix.translateM(model, 0, -position[0], -position[1], -position[2]);
 		}
 	}
-	
+
+	/**
+	 * Translate the cameras position with the given coordinates
+	 * @param x translation x coordinate
+	 * @param y translation y coordinate
+	 * @param z translation z coordinate
+	 */
+	public void translate(float x, float y, float z) {
+		synchronized(model) {
+			position[0] -= x;
+			position[1] -= y;
+			position[2] -= z;
+			Matrix.translateM(model, 0, -x, -y, -z);
+		}
+	}
+
+	/**
+	 * Translate the cameras position with the given coordinates
+	 * @param vector3f an array of size three, containing x,y and z coordinates
+	 */
+	public void translate(float[] vector3f) {
+		if(vector3f == null || vector3f.length != 3) {
+			return;
+		}
+		synchronized(model) {
+			position[0] -= vector3f[0];
+			position[1] -= vector3f[1];
+			position[2] -= vector3f[2];
+			Matrix.translateM(model, 0, -vector3f[0], -vector3f[1], -vector3f[2]);
+		}
+	}
+
+	/**
+	 * @return the current position
+	 */
+	public float[] getPosition() {
+		return position;
+	}
+
+	/**
+	 * Set the cameras model view matrix to the identity matrix
+	 */
 	public void setIdentity() {
 		synchronized(model) {
 			Matrix.setIdentityM(model, 0);
+			position[0] = 0;
+			position[1] = 0;
+			position[2] = 0;
+		}
+	}
+
+	/**
+	 * Set the absolute position of this camera
+	 * @param x x coordinate
+	 * @param y y coordinate
+	 * @param z z coordinate
+	 */
+	public void setPosition(float x, float y, float z) {
+		synchronized(model) {
+			// revert last position
+			Matrix.translateM(model, 0, position[0], position[1], position[2]);
+			// set new position
+			position[0] = x;
+			position[1] = y;
+			position[2] = z;
+			Matrix.translateM(model, 0, -position[0], -position[1], -position[2]);
 		}
 	}
 }
