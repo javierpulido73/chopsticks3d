@@ -9,6 +9,7 @@ import com.chopsticks3d.math.MatrixMath;
 public class MeshNode extends SceneNode {
 	private Mesh mMesh;
 	private Texture mTexture;
+	private Material mMaterial;
 	
 	public MeshNode(Mesh mesh) {
 		mMesh = mesh;
@@ -17,6 +18,17 @@ public class MeshNode extends SceneNode {
 	public MeshNode(Mesh mesh, Texture texture) {
 		mMesh = mesh;
 		mTexture = texture;
+	}
+	
+	public MeshNode(Mesh mesh, Material material) {
+		mMesh = mesh;
+		mMaterial = material;
+	}
+	
+	public MeshNode(Mesh mesh, Texture texture, Material material) {
+		mMesh = mesh;
+		mTexture = texture;
+		mMaterial = material;
 	}
 	
 	@Override
@@ -68,5 +80,13 @@ public class MeshNode extends SceneNode {
 	
 	public Texture getTexture() {
 		return mTexture;
+	}
+	
+	public void setMaterial(Material material) {
+		mMaterial = material;
+	}
+	
+	public Material getMaterial() {
+		return mMaterial;
 	}
 }

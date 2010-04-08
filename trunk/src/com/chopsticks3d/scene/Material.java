@@ -9,77 +9,77 @@ public class Material {
 	public static float[] DEFAULT_EMISSION = {0.0f, 0.0f, 0.0f, 1.0f};
 	public static float DEFAULT_SHININESS = 0.0f;
 	
-	private static float[] current_ambient;
-	private static float[] current_diffuse;
-	private static float[] current_specular;
-	private static float[] current_emission;
-	private static float current_shininess;
-	private static boolean current_useColorMaterial;
+	private static float[] mCurrentAmbient;
+	private static float[] mCurrentDiffuse;
+	private static float[] mCurrentSpecular;
+	private static float[] mCurrentEmission;
+	private static float mCurrentShininess;
+	private static boolean mCurrentUseColorMaterial;
 	
-	private float[] ambient;
-	private float[] diffuse;
-	private float[] specular;
-	private float[] emission;
-	private float shininess; // 0 - 128
-	private boolean useColorMaterial;
+	private float[] mAmbient;
+	private float[] mDiffuse;
+	private float[] mSpecular;
+	private float[] mEmission;
+	private float mShininess; // 0 - 128
+	private boolean mUseColorMaterial;
 	
 	/**
 	 * Sets the material to the one specified
 	 * @param gl
 	 */
-	public void applyState(GL10 gl) {
-		if(current_useColorMaterial != useColorMaterial) {
-			current_useColorMaterial = useColorMaterial;
-			if(current_useColorMaterial) {
+	public void applyMaterial(GL10 gl) {
+		if(mCurrentUseColorMaterial != mUseColorMaterial) {
+			mCurrentUseColorMaterial = mUseColorMaterial;
+			if(mCurrentUseColorMaterial) {
 				gl.glEnable(GL10.GL_COLOR_MATERIAL);
 			} else {
 				gl.glDisable(GL10.GL_COLOR_MATERIAL);
 			}
 		}
 		
-		if(ambient != null) {
-			if(current_ambient == null || !sameColor(current_ambient, ambient)) {
-				current_ambient = ambient;
-				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, ambient, 0);
+		if(mAmbient != null) {
+			if(mCurrentAmbient == null || !sameColor(mCurrentAmbient, mAmbient)) {
+				mCurrentAmbient = mAmbient;
+				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, mAmbient, 0);
 			}
-		} else if(current_ambient != null && !sameColor(current_ambient, DEFAULT_AMBIENT)) {
-			current_ambient = null;
+		} else if(mCurrentAmbient != null && !sameColor(mCurrentAmbient, DEFAULT_AMBIENT)) {
+			mCurrentAmbient = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, DEFAULT_AMBIENT, 0);
 		}
 		
-		if(diffuse != null) {
-			if(current_diffuse == null || !sameColor(current_diffuse, diffuse)) {
-				current_diffuse = diffuse;
-				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, diffuse, 0);
+		if(mDiffuse != null) {
+			if(mCurrentDiffuse == null || !sameColor(mCurrentDiffuse, mDiffuse)) {
+				mCurrentDiffuse = mDiffuse;
+				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, mDiffuse, 0);
 			}
-		} else if(current_diffuse != null && !sameColor(current_diffuse, DEFAULT_DIFFUSE)) {
-			current_diffuse = null;
+		} else if(mCurrentDiffuse != null && !sameColor(mCurrentDiffuse, DEFAULT_DIFFUSE)) {
+			mCurrentDiffuse = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, DEFAULT_DIFFUSE, 0);
 		}
 		
-		if(emission != null) {
-			if(current_emission == null || !sameColor(current_emission, emission)) {
-				current_emission = emission;
-				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, emission, 0);
+		if(mEmission != null) {
+			if(mCurrentEmission == null || !sameColor(mCurrentEmission, mEmission)) {
+				mCurrentEmission = mEmission;
+				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, mEmission, 0);
 			}
-		} else if(current_emission != null && !sameColor(current_emission, DEFAULT_EMISSION)) {
-			current_emission = null;
+		} else if(mCurrentEmission != null && !sameColor(mCurrentEmission, DEFAULT_EMISSION)) {
+			mCurrentEmission = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, DEFAULT_EMISSION, 0);
 		}
 		
-		if(specular != null) {
-			if(current_specular == null || !sameColor(current_specular, specular)) {
-				current_specular = specular;
-				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, specular, 0);
+		if(mSpecular != null) {
+			if(mCurrentSpecular == null || !sameColor(mCurrentSpecular, mSpecular)) {
+				mCurrentSpecular = mSpecular;
+				gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, mSpecular, 0);
 			}
-		} else if(current_specular != null && !sameColor(current_specular, DEFAULT_SPECULAR)) {
-			current_specular = null;
+		} else if(mCurrentSpecular != null && !sameColor(mCurrentSpecular, DEFAULT_SPECULAR)) {
+			mCurrentSpecular = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, DEFAULT_SPECULAR, 0);
 		}
 		
-		if(current_shininess != shininess) {
-			current_shininess = shininess;
-			gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, shininess);
+		if(mCurrentShininess != mShininess) {
+			mCurrentShininess = mShininess;
+			gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, mShininess);
 		}
 	}
 	
@@ -87,35 +87,35 @@ public class Material {
 	 * Sets the material to the OpenGL standards
 	 * @param gl
 	 */
-	public static void removeState(GL10 gl) {
+	public static void removeMaterial(GL10 gl) {
 		
-		if(current_useColorMaterial) {
-			current_useColorMaterial = false;
+		if(mCurrentUseColorMaterial) {
+			mCurrentUseColorMaterial = false;
 			gl.glDisable(GL10.GL_COLOR_MATERIAL);
 		}
 		
-		if(current_ambient != null && !sameColor(current_ambient, DEFAULT_AMBIENT)) {
-			current_ambient = null;
+		if(mCurrentAmbient != null && !sameColor(mCurrentAmbient, DEFAULT_AMBIENT)) {
+			mCurrentAmbient = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_AMBIENT, DEFAULT_AMBIENT, 0);
 		}
 		
-		if(current_diffuse != null && !sameColor(current_diffuse, DEFAULT_DIFFUSE)) {
-			current_diffuse = null;
+		if(mCurrentDiffuse != null && !sameColor(mCurrentDiffuse, DEFAULT_DIFFUSE)) {
+			mCurrentDiffuse = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_DIFFUSE, DEFAULT_DIFFUSE, 0);
 		}
 		
-		if(current_emission != null && !sameColor(current_emission, DEFAULT_EMISSION)) {
-			current_emission = null;
+		if(mCurrentEmission != null && !sameColor(mCurrentEmission, DEFAULT_EMISSION)) {
+			mCurrentEmission = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_EMISSION, DEFAULT_EMISSION, 0);
 		}
 		
-		if(current_specular != null && !sameColor(current_specular, DEFAULT_SPECULAR)) {
-			current_specular = null;
+		if(mCurrentSpecular != null && !sameColor(mCurrentSpecular, DEFAULT_SPECULAR)) {
+			mCurrentSpecular = null;
 			gl.glMaterialfv(GL10.GL_FRONT_AND_BACK, GL10.GL_SPECULAR, DEFAULT_SPECULAR, 0);
 		}
 		
-		if(current_shininess != DEFAULT_SHININESS) {
-			current_shininess = DEFAULT_SHININESS;
+		if(mCurrentShininess != DEFAULT_SHININESS) {
+			mCurrentShininess = DEFAULT_SHININESS;
 			gl.glMaterialf(GL10.GL_FRONT_AND_BACK, GL10.GL_SHININESS, DEFAULT_SHININESS);
 		}
 	}
@@ -127,13 +127,13 @@ public class Material {
 		if(color4f == null || color4f.length != 4) {
 			return;
 		}
-		if(ambient == null) {
-			ambient = new float[4];
+		if(mAmbient == null) {
+			mAmbient = new float[4];
 		}
-		this.ambient[0] = color4f[0];
-		this.ambient[1] = color4f[1]; 
-		this.ambient[2] = color4f[2]; 
-		this.ambient[3] = color4f[3]; 
+		this.mAmbient[0] = color4f[0];
+		this.mAmbient[1] = color4f[1]; 
+		this.mAmbient[2] = color4f[2]; 
+		this.mAmbient[3] = color4f[3]; 
 	}
 	
 	/**
@@ -144,20 +144,20 @@ public class Material {
 	 * @param a alpha component
 	 */
 	public void setAmbient(float r, float g, float b, float a) {
-		if(ambient == null) {
-			ambient = new float[4];
+		if(mAmbient == null) {
+			mAmbient = new float[4];
 		}
-		this.ambient[0] = r;
-		this.ambient[1] = g; 
-		this.ambient[2] = b; 
-		this.ambient[3] = a; 
+		this.mAmbient[0] = r;
+		this.mAmbient[1] = g; 
+		this.mAmbient[2] = b; 
+		this.mAmbient[3] = a; 
 	}
 
 	/**
 	 * @return the ambient
 	 */
 	public float[] getAmbient() {
-		return ambient;
+		return mAmbient;
 	}
 	
 	/**
@@ -167,13 +167,13 @@ public class Material {
 		if(color4f == null || color4f.length != 4) {
 			return;
 		}
-		if(diffuse == null) {
-			diffuse = new float[4];
+		if(mDiffuse == null) {
+			mDiffuse = new float[4];
 		}
-		this.diffuse[0] = color4f[0];
-		this.diffuse[1] = color4f[1]; 
-		this.diffuse[2] = color4f[2]; 
-		this.diffuse[3] = color4f[3]; 
+		this.mDiffuse[0] = color4f[0];
+		this.mDiffuse[1] = color4f[1]; 
+		this.mDiffuse[2] = color4f[2]; 
+		this.mDiffuse[3] = color4f[3]; 
 	}
 	
 	/**
@@ -184,20 +184,20 @@ public class Material {
 	 * @param a alpha component
 	 */
 	public void setDiffuse(float r, float g, float b, float a) {
-		if(diffuse == null) {
-			diffuse = new float[4];
+		if(mDiffuse == null) {
+			mDiffuse = new float[4];
 		}
-		this.diffuse[0] = r;
-		this.diffuse[1] = g; 
-		this.diffuse[2] = b; 
-		this.diffuse[3] = a; 
+		this.mDiffuse[0] = r;
+		this.mDiffuse[1] = g; 
+		this.mDiffuse[2] = b; 
+		this.mDiffuse[3] = a; 
 	}
 
 	/**
 	 * @return the diffuse
 	 */
 	public float[] getDiffuse() {
-		return diffuse;
+		return mDiffuse;
 	}
 	
 	/**
@@ -207,13 +207,13 @@ public class Material {
 		if(color4f == null || color4f.length != 4) {
 			return;
 		}
-		if(emission == null) {
-			emission = new float[4];
+		if(mEmission == null) {
+			mEmission = new float[4];
 		}
-		this.emission[0] = color4f[0];
-		this.emission[1] = color4f[1]; 
-		this.emission[2] = color4f[2]; 
-		this.emission[3] = color4f[3]; 
+		this.mEmission[0] = color4f[0];
+		this.mEmission[1] = color4f[1]; 
+		this.mEmission[2] = color4f[2]; 
+		this.mEmission[3] = color4f[3]; 
 	}
 	
 	/**
@@ -224,20 +224,20 @@ public class Material {
 	 * @param a alpha component
 	 */
 	public void setEmission(float r, float g, float b, float a) {
-		if(emission == null) {
-			emission = new float[4];
+		if(mEmission == null) {
+			mEmission = new float[4];
 		}
-		this.emission[0] = r;
-		this.emission[1] = g; 
-		this.emission[2] = b; 
-		this.emission[3] = a; 
+		this.mEmission[0] = r;
+		this.mEmission[1] = g; 
+		this.mEmission[2] = b; 
+		this.mEmission[3] = a; 
 	}
 
 	/**
 	 * @return the emission
 	 */
 	public float[] getEmission() {
-		return emission;
+		return mEmission;
 	}
 	
 	/**
@@ -247,13 +247,13 @@ public class Material {
 		if(color4f == null || color4f.length != 4) {
 			return;
 		}
-		if(specular == null) {
-			specular = new float[4];
+		if(mSpecular == null) {
+			mSpecular = new float[4];
 		}
-		this.specular[0] = color4f[0];
-		this.specular[1] = color4f[1]; 
-		this.specular[2] = color4f[2]; 
-		this.specular[3] = color4f[3]; 
+		this.mSpecular[0] = color4f[0];
+		this.mSpecular[1] = color4f[1]; 
+		this.mSpecular[2] = color4f[2]; 
+		this.mSpecular[3] = color4f[3]; 
 	}
 	
 	/**
@@ -264,48 +264,48 @@ public class Material {
 	 * @param a alpha component
 	 */
 	public void setSpecular(float r, float g, float b, float a) {
-		if(specular == null) {
-			specular = new float[4];
+		if(mSpecular == null) {
+			mSpecular = new float[4];
 		}
-		this.specular[0] = r;
-		this.specular[1] = g; 
-		this.specular[2] = b; 
-		this.specular[3] = a; 
+		this.mSpecular[0] = r;
+		this.mSpecular[1] = g; 
+		this.mSpecular[2] = b; 
+		this.mSpecular[3] = a; 
 	}
 
 	/**
 	 * @return the specular
 	 */
 	public float[] getSpecular() {
-		return specular;
+		return mSpecular;
 	}
 	
 	/**
 	 * @param shininess the shininess to set
 	 */
 	public void setShininess(float shininess) {
-		this.shininess = shininess;
+		this.mShininess = shininess;
 	}
 
 	/**
 	 * @return the shininess
 	 */
 	public float getShininess() {
-		return shininess;
+		return mShininess;
 	}
 	
 	/**
 	 * @param b true if this material should use vertex colors
 	 */
 	public void setUseColorMaterial(boolean b) {
-		useColorMaterial = b;
+		mUseColorMaterial = b;
 	}
 	
 	/**
 	 * @return true if this material uses vertex colors
 	 */
 	public boolean usesColorMaterial() {
-		return useColorMaterial;
+		return mUseColorMaterial;
 	}
 	
 	// maybe not so clever
